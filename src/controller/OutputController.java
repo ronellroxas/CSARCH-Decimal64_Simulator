@@ -3,13 +3,12 @@ package controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.JTextField;
-
+import javax.swing.JTextArea;
 import model.Dec64;
 
 public class OutputController implements ActionListener {
 
-    private JTextField tfOutput;
+    private JTextArea tfOutput;
     private Dec64 dec64;
 
     @Override
@@ -21,7 +20,7 @@ public class OutputController implements ActionListener {
         this.dec64 = n;
     }
 
-    public void setTarget(JTextField tfOutput) {
+    public void setTarget(JTextArea tfOutput) {
         this.tfOutput = tfOutput;
     }
     

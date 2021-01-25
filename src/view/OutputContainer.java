@@ -2,16 +2,18 @@ package view;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
+
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 import controller.InputController;
 import controller.OutputController;
-import model.Dec64;
 
 /***
  * Creates the Output container including necessary components.
@@ -19,7 +21,7 @@ import model.Dec64;
 public class OutputContainer extends JPanel{
     
     private JLabel lblOutput;
-    private JTextField tfOutput;
+    private JTextArea tfOutput;
     private JButton btnOutput;
     private final int V_SPACING = 5;
 
@@ -56,7 +58,7 @@ public class OutputContainer extends JPanel{
      * Refactored for styling purposes.
      */
     private void initializeOutputField() {
-        tfOutput = new JTextField(50);
+        tfOutput = new JTextArea(4, 50);
         tfOutput.setEditable(false);
         tfOutput.setBackground(Color.WHITE);
         this.add(tfOutput);
