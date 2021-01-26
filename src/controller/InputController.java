@@ -20,7 +20,7 @@ public class InputController implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         String text = tfInput.getText();
-
+        
         //set base 10
         try {
             Double.parseDouble(text);
@@ -31,10 +31,10 @@ public class InputController implements ActionListener {
             dec64.setExponent(Integer.parseInt(text));
             dec64.fixInput();
             
+            tfOutput.setText("");
             tfOutput.append(dec64.toString());
         }
-        catch(NumberFormatException ne){
-            dec64.setBase10(null);
+        catch(Exception ne){
             JOptionPane.showMessageDialog(tfInput, "Invalid Input/s.", "Input Conversion Error", JOptionPane.ERROR_MESSAGE);
         }
 

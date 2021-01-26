@@ -8,11 +8,11 @@ public class Dec64 {
     // Base-10 representation of the decimal value
     private String base10;
     private Integer exponent;
-    private String binaryBase10;
     private String signBit;
     private String combiField;
     private String expoContinuation;
     private String coefContinuation;
+    private String hexValue;
 
     public Dec64() {
         this.base10 = null;
@@ -63,7 +63,6 @@ public class Dec64 {
         }
 
         int mostSignificant = Integer.valueOf(temp.substring(0, 1));
-        System.out.println("MostSig: " + mostSignificant + " binary: " + binaryConvert(mostSignificant));
 
         // -> mostSig to bcd
 
@@ -73,11 +72,22 @@ public class Dec64 {
             exponentRep = "0" + exponentRep;
         }
 
-        String combiFieldValue = combiField(mostSignificant, exponentRep);
+        combiField = combiField(mostSignificant, exponentRep);
 
-        String ExpContValue = getExpContinuation(exponentRep);
+        expoContinuation = getExpContinuation(exponentRep);
 
-        System.out.println("Combination field: " + combiFieldValue + "\nExponent Continuation: " + ExpContValue);
+        temp = temp.substring(1);
+
+        coefContinuation = DBCD(Integer.valueOf(temp.substring(0, 3)));
+        temp = temp.substring(3);
+
+        while(temp.length() > 0) {
+            coefContinuation += DBCD(Integer.valueOf(temp.substring(0, 3)));
+            temp = temp.substring(3);
+        }
+        coefContinuation = coefContinuation.trim();
+
+        hexValue = convertHex().toUpperCase();
     }
 
     private String binaryConvert(int n) {
@@ -109,7 +119,7 @@ public class Dec64 {
     private String DBCD(int num){
         int hundreds, tens, ones;
         String hdString, tnString, onString, numString;
-        char[] dbcdString = new char[11];
+        char[] dbcdString = new char[10];
         char a, e, i;
 
         hundreds =  num/100;
@@ -142,7 +152,6 @@ public class Dec64 {
                             dbcdString[7] = numString.charAt(9);
                             dbcdString[8] = numString.charAt(10);
                             dbcdString[9] = numString.charAt(11);
-                            dbcdString[10] = '\0';
                             break;
 
                             case '1':
@@ -156,7 +165,6 @@ public class Dec64 {
                             dbcdString[7] = '0';
                             dbcdString[8] = '0';
                             dbcdString[9] = numString.charAt(11);
-                            dbcdString[10] = '\0';
                             break;                            
                         };
                         break;
@@ -174,7 +182,6 @@ public class Dec64 {
                             dbcdString[7] = '0';
                             dbcdString[8] = '1';
                             dbcdString[9] = numString.charAt(11);
-                            dbcdString[10] = '\0';
                             break;
 
                             case '1':
@@ -188,16 +195,15 @@ public class Dec64 {
                             dbcdString[7] = '1';
                             dbcdString[8] = '1';
                             dbcdString[9] = numString.charAt(11);
-                            dbcdString[10] = '\0';
                             break;                            
                         };
                         break;
                 }; break;
-            case 1: 
+            case '1': 
                 switch(e){
-                    case 0:
+                    case '0':
                         switch(i){
-                            case 0:
+                            case '0':
                             dbcdString[0] = numString.charAt(9); 
                             dbcdString[1] = numString.charAt(10);
                             dbcdString[2] = numString.charAt(3);
@@ -208,9 +214,8 @@ public class Dec64 {
                             dbcdString[7] = '1';
                             dbcdString[8] = '0';
                             dbcdString[9] = numString.charAt(11);
-                            dbcdString[10] = '\0';
                             break;
-                            case 1:
+                            case '1':
                             dbcdString[0] = numString.charAt(5); 
                             dbcdString[1] = numString.charAt(6);
                             dbcdString[2] = numString.charAt(3);
@@ -221,12 +226,11 @@ public class Dec64 {
                             dbcdString[7] = '1';
                             dbcdString[8] = '1';
                             dbcdString[9] = numString.charAt(11);
-                            dbcdString[10] = '\0';
                             break;
                         };
-                    case 1: 
+                    case '1': 
                         switch(i){
-                            case 0: 
+                            case '0': 
                             dbcdString[0] = numString.charAt(9); 
                             dbcdString[1] = numString.charAt(10);
                             dbcdString[2] = numString.charAt(3);
@@ -237,10 +241,9 @@ public class Dec64 {
                             dbcdString[7] = '1';
                             dbcdString[8] = '1';
                             dbcdString[9] = numString.charAt(11);
-                            dbcdString[10] = '\0';
                             break;
 
-                            case 1:
+                            case '1':
                             dbcdString[0] = '0';
                             dbcdString[1] = '0';
                             dbcdString[2] = numString.charAt(3);
@@ -251,14 +254,13 @@ public class Dec64 {
                             dbcdString[7] = '1';
                             dbcdString[8] = '1';
                             dbcdString[9] = numString.charAt(11);
-                            dbcdString[10] = '\0';
                             break;
                         };
                     break;
                 }; break;
         }
         
-        return Arrays.toString(dbcdString);
+        return String.valueOf(dbcdString);
     }
 
     private String combiField(int mostSignificant, String exponentRep) {
@@ -290,12 +292,33 @@ public class Dec64 {
         return exponentRep.substring(2);
     }
 
-    private String getCoefContinuation() {
-        return "";
+    private String convertHex() {
+        String binary = signBit + combiField + expoContinuation + coefContinuation;
+        
+        String hex = "";
+        while(binary.length() > 0) {
+            String subBin = binary.substring(0, 4);
+            int decimal = Integer.parseInt(subBin, 2);
+            
+            hex = hex + Integer.toString(decimal, 16);
+
+            binary = binary.substring(4);
+            
+        }
+        
+
+        return hex;
     }
 
     @Override
     public String toString() {
-        return "Input: " + base10 + "x10 ^ " + String.valueOf(exponent) + "\n";
+        String output = "Input: " + base10 + "x10 ^ " + String.valueOf(exponent) + "\n" +
+                        "Sign: " + signBit + "\n" + 
+                        "Combination Field:" + combiField + "\n" + 
+                        "Exponent Continuation: " + expoContinuation + "\n" +
+                        "Coefficient Continuation: " + coefContinuation + "\n" +
+                        "HEXADECIMAL: " + hexValue + "\n";
+
+        return output;
     }
 }

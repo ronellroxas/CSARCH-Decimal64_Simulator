@@ -1,6 +1,6 @@
 @echo off
 
-
+MODE CON COLS=30 LINES=2
 echo Compiling Main...
 javac *.java
 

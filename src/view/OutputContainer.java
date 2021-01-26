@@ -38,7 +38,7 @@ public class OutputContainer extends JPanel{
 
         controller.setTarget(tfOutput);
         iController.setOutput(tfOutput);
-
+        btnOutput.addActionListener(controller);
     }
 
     /***
@@ -71,7 +71,7 @@ public class OutputContainer extends JPanel{
      * Refactored for styling purposes.
      */
     private void initializeOutputButton() {
-        btnOutput = new JButton("Copy Results");
+        btnOutput = new JButton("Copy to Clipboard");
         this.add(btnOutput);
 
         //Styling here
