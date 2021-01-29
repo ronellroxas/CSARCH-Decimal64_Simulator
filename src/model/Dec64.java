@@ -1,8 +1,5 @@
 package model;
 
-import java.io.Console;
-import java.util.Arrays;
-
 public class Dec64 {
 
     // Base-10 representation of the decimal value
@@ -40,6 +37,29 @@ public class Dec64 {
 
     public void setExponent(Integer n) {
         this.exponent = n;
+    }
+
+    public void isNaN(String input) {
+        base10 = input + " (NaN)";
+        signBit = "0";
+        combiField = "11110";
+        expoContinuation = "--";
+        coefContinuation = "-----";
+        hexValue = "NaN";
+    }
+
+    public void isInfinity(String input) {
+        base10 = input + " (Infinity)";
+        if(Integer.parseInt(input) < 0) {
+            signBit = "1";
+        }
+        else {
+            signBit = "0";
+        }
+        combiField = "11110";
+        expoContinuation = "--";
+        coefContinuation = "-----";
+        hexValue = "Infinity";
     }
 
     public void fixInput() {

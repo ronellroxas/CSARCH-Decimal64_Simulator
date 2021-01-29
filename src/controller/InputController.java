@@ -2,8 +2,8 @@ package controller;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.Console;
 
-import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -23,19 +23,26 @@ public class InputController implements ActionListener {
         
         //set base 10
         try {
-            Double.parseDouble(text);
-            dec64.setBase10(text);
-            
             //set exponent
-            text = tfExponent.getText();
-            dec64.setExponent(Integer.parseInt(text));
-            dec64.fixInput();
+            int exponent = Integer.parseInt(tfExponent.getText());
+            if(exponent > 369 || exponent < -398) {
+                dec64.isInfinity(text);
+            }
+            else {
+                System.out.println("abc");
+                Double.parseDouble(text);
+                dec64.setBase10(text);
+                dec64.setExponent(exponent);
+                dec64.fixInput();
+            }
             
-            tfOutput.setText("");
-            tfOutput.append(dec64.toString());
         }
         catch(Exception ne){
-            JOptionPane.showMessageDialog(tfInput, "Invalid Input/s.", "Input Conversion Error", JOptionPane.ERROR_MESSAGE);
+            dec64.isNaN(text);
+        }
+        finally {
+            tfOutput.setText("");
+            tfOutput.append(dec64.toString());
         }
 
     }
