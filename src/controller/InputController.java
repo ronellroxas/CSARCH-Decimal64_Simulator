@@ -29,7 +29,6 @@ public class InputController implements ActionListener {
                 dec64.isInfinity(text);
             }
             else {
-                System.out.println("abc");
                 Double.parseDouble(text);
                 dec64.setBase10(text);
                 dec64.setExponent(exponent);
